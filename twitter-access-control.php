@@ -12,7 +12,7 @@ session_start();
 include('tac-settings.php');
 include('oauth/twitteroauth.php');
 
-if ($_SERVER['REMOTE_ADDR'] == "2.217.85.229" && !is_admin()) {
+if (!is_admin()) {
 
 	add_action('template_redirect', 'checkAccess');
 	add_action('template_redirect', 'processOAuth');

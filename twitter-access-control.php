@@ -90,8 +90,7 @@ function processOAuth() {
 			unset($_SESSION['oauth_token']);
 			unset($_SESSION['oauth_token_secret']);
 			
-			//$result = $connection->get('friendships/lookup', array('screen_name' => $account));
-			$result = $connection->get('friendships/lookup', array('screen_name' => 'gmedtv'));
+			$result = $connection->get('friendships/lookup', array('screen_name' => $account));
 			$connections = $result[0]['connections'];
 			$name = $result[0]['screen_name'];
 			if (!in_array('following',$connections) && $name != $account) {

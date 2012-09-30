@@ -20,6 +20,15 @@ if (!is_admin()) {
 
 }
 
+function getAccessPath() {
+	global $auth_page;
+	if (isset($_SERVER["SCRIPT_URI"])) {
+		return $_SERVER["SCRIPT_URI"];
+	} else {
+		return "http://".$_SERVER["SERVER_NAME"].$auth_page;
+	}
+}
+
 function processOAuth() {
 	global $auth_page;
 	global $consumer_key;
@@ -32,7 +41,7 @@ function processOAuth() {
 	if (is_page($page_id)) {
 		if (isset($_GET['oauth']) && $_GET['oauth'] == "go") {
 			
-			$callback = $_SERVER["SCRIPT_URI"]."?oauth=response";
+			$callback = getAccessPath()."?oauth=response";
 			
 			/* Build TwitterOAuth object with client credentials. */
 			$connection = new TwitterOAuth($consumer_key, $consumer_secret);
@@ -60,20 +69,20 @@ function processOAuth() {
 			if (isset($_REQUEST['denied'])) die("You declined to authenticate with twitter and cannot access the site.");
 			
 			if (!isset($_REQUEST['oauth_token'])) {
-				header("Location: ".$_SERVER["SCRIPT_URI"]."?oauth=go");
+				header("Location: ".getAccessPath()."?oauth=go");
 				exit();
 			}
 			
 			/* If the oauth_token is old redirect to the connect page. */
 			if (isset($_REQUEST['oauth_token']) && isset($_SESSION['oauth_token']) && $_SESSION['oauth_token'] !== $_REQUEST['oauth_token']) {
 				$_SESSION['oauth_status'] = 'oldtoken';
-				header("Location: ".$_SERVER["SCRIPT_URI"]."?oauth=go");
+				header("Location: ".getAccessPath()."?oauth=go");
 				exit();
 			}
 			
 			if (!isset($_SESSION['oauth_token'])) {
 				//Repeated request. This shouldn't happen.
-				header("Location: ".$_SERVER["SCRIPT_URI"]."?oauth=go");
+				header("Location: ".getAccessPath()."?oauth=go");
 				exit();
 			}
 			

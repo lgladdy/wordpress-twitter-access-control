@@ -98,10 +98,12 @@ function processOAuth() {
 			/* Remove no longer needed request tokens */
 			unset($_SESSION['oauth_token']);
 			unset($_SESSION['oauth_token_secret']);
+
+			$name = $access_token['screen_name'];
 			
 			$result = $connection->get('friendships/lookup', array('screen_name' => $account));
 			$connections = $result[0]['connections'];
-			$name = $result[0]['screen_name'];
+			
 			if (!in_array('following',$connections) && $name != $account) {
 				unset($_SESSION['authorised']);
 				die("You are not following $account and therefore are unable to visit this blog.");
